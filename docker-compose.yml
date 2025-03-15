@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  project:
+    build:
+      context: ./project
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./project/.env
+    depends_on:
+      - redis
+    volumes:
+      - ./project:/app
+      - /app/node_modules
+    command: sh -c "npm run build && npm run start"
+
+volumes:
+  redis_data:
+    driver: local
