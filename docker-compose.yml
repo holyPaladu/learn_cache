@@ -17,7 +17,7 @@ services:
 
   postgres-db:
     image: postgres:15
-    restart: always
+    container_name: postgres_cache
     ports:
       - "5432:5432"
     environment:
@@ -26,7 +26,6 @@ services:
       POSTGRES_DB: usersdb
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - learn-cache-networks
 
@@ -46,7 +45,7 @@ services:
     volumes:
       - ./project:/app
       - /app/node_modules
-    command: sh -c "npm run build && npm run start"
+    command: npm run start
 
 volumes:
   pgdata:

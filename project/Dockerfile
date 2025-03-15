@@ -13,11 +13,9 @@ RUN npm install
 # Копируем исходный код
 COPY . .
 
-# Выполняем сборку
-RUN npm run build
-
 # Открываем порт
 EXPOSE 3000
 
 # Запускаем приложение
 CMD ["npm", "run", "start"]
+
