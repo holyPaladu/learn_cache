@@ -14,14 +14,19 @@ export class UsersService {
   ) {}
 
   async getAllUsers(): Promise<User[]> {
+    console.time('getAllUsers');
     const cachedUsers = await this.cacheManager.get('users');
     if (cachedUsers) {
-      console.log('Возвращаем данные из кэша');
+      console.timeEnd('getAllUsers');
+      console.log('✅ Данные получены из кэша');
       return cachedUsers as User[];
     }
+
+    console.log('⏳ Данные загружаются из базы...');
     const users = await this.userRepository.find();
-    console.log(`Сохраняем в кэш`);
+    console.log('💾 Сохраняем данные в кэш');
     await this.cacheManager.set('users', users, 60 * 1000);
+    console.timeEnd('getAllUsers');
     return users;
   }
 
