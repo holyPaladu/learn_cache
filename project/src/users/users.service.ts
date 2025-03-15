@@ -17,8 +17,8 @@ export class UsersService {
     console.time('getAllUsers');
     const cachedUsers = await this.cacheManager.get('users');
     if (cachedUsers) {
-      console.timeEnd('getAllUsers');
       console.log('✅ Данные получены из кэша');
+      console.timeEnd('getAllUsers');
       return cachedUsers as User[];
     }
 
@@ -33,5 +33,5 @@ export class UsersService {
   async createUser(data: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(data);
     return this.userRepository.save(user);
-  }
+  } 
 }
