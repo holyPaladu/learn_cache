@@ -10,6 +10,21 @@ services:
     volumes:
       - redis_data:/data
 
+  postgres-db:
+    image: postgres:15
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: usersdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-networks
+
   project:
     build:
       context: ./project
@@ -19,6 +34,7 @@ services:
     env_file:
       - ./project/.env
     depends_on:
+      - postgres-db
       - redis
     volumes:
       - ./project:/app
@@ -26,5 +42,6 @@ services:
     command: sh -c "npm run build && npm run start"
 
 volumes:
+  pgdata:
   redis_data:
     driver: local
