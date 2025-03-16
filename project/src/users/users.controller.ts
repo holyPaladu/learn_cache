@@ -14,9 +14,18 @@ import { NoFilesInterceptor } from '@nestjs/platform-express';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('/cache/memory')
+  async getAllCacheByKey() {
+    return this.usersService.checkCacheSize();
+  }
   @Get('/all')
   async getAllUsers() {
     const users = await this.usersService.getAllUsers();
+    return users;
+  }
+  @Get('/all/test/ids')
+  async getAllUsersTestIds() {
+    const users = await this.usersService.getAllUsersTest();
     return users;
   }
 
